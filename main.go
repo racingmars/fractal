@@ -14,9 +14,9 @@ import (
 	"time"
 )
 
-const iterations = 250
+const iterations = 1000
 const width = 1600
-const useHistogramMethod bool = false
+const useHistogramMethod bool = true
 
 func main() {
 	heighttmp := width / 1.75
@@ -28,7 +28,7 @@ func main() {
 		fractal[i] = make([]int, height)
 	}
 
-	img := image.NewGray(image.Rect(0, 0, width, height))
+	img := image.NewGray16(image.Rect(0, 0, width, height))
 
 	workers := runtime.NumCPU()
 	runtime.GOMAXPROCS(workers)
@@ -76,10 +76,10 @@ func main() {
 				img.Set(x, y, color.Black)
 			} else {
 				if !useHistogramMethod {
-					gray := float64(fractal[x][y]) / float64(iterations) * float64(math.MaxUint8)
-					img.SetGray(x, y, color.Gray{uint8(math.MaxUint8 - gray)})
+					gray := float64(fractal[x][y]) / float64(iterations) * float64(math.MaxUint16)
+					img.SetGray16(x, y, color.Gray16{uint16(math.MaxUint16 - gray)})
 				} else {
-					img.SetGray(x, y, color.Gray{uint8(colors[fractal[x][y]] * math.MaxUint8)})
+					img.SetGray16(x, y, color.Gray16{uint16(colors[fractal[x][y]] * math.MaxUint16)})
 				}
 			}
 		}
